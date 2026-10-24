@@ -1,0 +1,8 @@
+streamlit
+pymongo
+anthropic
+voyageai
+python-dotenv
+google-genai
+langgraph
+langchain
