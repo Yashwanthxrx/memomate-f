@@ -23,11 +23,10 @@ st.set_page_config(
 if "theme_mode" not in st.session_state:
     st.session_state.theme_mode = "🌙 Midnight Coral"
 
-# Sidebar: Theme Selector
+# Sidebar: Atmosphere Selector
 st.sidebar.markdown("""
-<div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-    <span style="font-size:1.1rem;">🎨</span>
-    <span style="font-weight:600; font-size:0.85rem; letter-spacing:0.5px; text-transform:uppercase;">Atmosphere</span>
+<div style="font-weight:600; font-size:0.82rem; letter-spacing:0.8px; text-transform:uppercase; margin-bottom:6px;">
+    Atmosphere
 </div>
 """, unsafe_allow_html=True)
 
@@ -41,7 +40,7 @@ theme_choice = st.sidebar.radio(
 st.session_state.theme_mode = theme_choice
 is_dark = "Midnight" in theme_choice
 
-# --- Modern Design Tokens (Clean Slate / Alabaster Palette) ---
+# --- Design Tokens (Dark & Light) ---
 if is_dark:
     theme_vars = """
     --her-bg: #0D1117;
@@ -49,7 +48,7 @@ if is_dark:
     --her-surface: #161B22;
     --her-surface-hover: #1F242C;
     --her-border: rgba(255, 90, 67, 0.22);
-    --her-header-bg: rgba(22, 27, 34, 0.92);
+    --her-header-bg: rgba(22, 27, 34, 0.94);
     --her-sidebar-bg: #111419;
     --her-user-bubble: #1F2630;
     --her-assistant-bubble: #161B22;
@@ -62,31 +61,33 @@ if is_dark:
     --her-btn-bg: #1F2630;
     --her-btn-text: #F0F6FC;
     --her-expander-bg: #161B22;
-    --her-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    --her-input-bg: #161B22;
+    --her-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
     --her-coral: #FF5A43;
     --her-coral-glow: rgba(255, 90, 67, 0.45);
     """
 else:
     theme_vars = """
-    --her-bg: #F8F9FA;
-    --her-bg-gradient: radial-gradient(circle at 12% 12%, rgba(230, 65, 45, 0.06) 0%, transparent 50%), radial-gradient(circle at 88% 85%, rgba(245, 220, 190, 0.35) 0%, transparent 45%);
+    --her-bg: #F5F7FA;
+    --her-bg-gradient: radial-gradient(circle at 12% 12%, rgba(224, 72, 54, 0.05) 0%, transparent 50%), radial-gradient(circle at 88% 85%, rgba(240, 220, 200, 0.3) 0%, transparent 45%);
     --her-surface: #FFFFFF;
-    --her-surface-hover: #FFF7F5;
-    --her-border: rgba(230, 65, 45, 0.18);
-    --her-header-bg: rgba(255, 255, 255, 0.94);
-    --her-sidebar-bg: #F0F2F5;
-    --her-user-bubble: #FFF2EE;
+    --her-surface-hover: #F8FAFD;
+    --her-border: rgba(0, 0, 0, 0.10);
+    --her-header-bg: #FFFFFF;
+    --her-sidebar-bg: #FFFFFF;
+    --her-user-bubble: #EFF3F8;
     --her-assistant-bubble: #FFFFFF;
-    --her-text: #1F2328;
-    --her-text-secondary: #424A53;
-    --her-muted: #656D76;
+    --her-text: #1E2329;
+    --her-text-secondary: #3B424C;
+    --her-muted: #5E6773;
     --her-title: #E04836;
     --her-card-bg: #FFFFFF;
-    --her-card-border: rgba(230, 65, 45, 0.16);
-    --her-btn-bg: #FFF2EE;
-    --her-btn-text: #1F2328;
+    --her-card-border: rgba(0, 0, 0, 0.10);
+    --her-btn-bg: #FFFFFF;
+    --her-btn-text: #1E2329;
     --her-expander-bg: #FFFFFF;
-    --her-shadow: 0 4px 18px rgba(220, 60, 45, 0.06);
+    --her-input-bg: #FFFFFF;
+    --her-shadow: 0 2px 14px rgba(0, 0, 0, 0.06);
     --her-coral: #E04836;
     --her-coral-glow: rgba(224, 72, 54, 0.25);
     """
@@ -99,11 +100,15 @@ HER_THEME_CSS = f"""
     {theme_vars}
 }}
 
-/* Universal Typography & Strict No-Overlap Line-Heights */
-html, body, [class*="css"], .stMarkdown, p, span, label {{
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+/* Typography: Set clean sans-serif on text elements ONLY, NEVER on icons */
+body, p, h1, h2, h3, h4, .stMarkdown p, .stChatMessage p, label, input, textarea {{
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     color: var(--her-text) !important;
-    line-height: 1.6 !important;
+}}
+
+/* PRESERVE STREAMLIT ICONS (Fixes literal 'arrow_down' and 'arrow_right' text) */
+[data-testid*="Icon"], [data-testid*="icon"], [class*="material-symbols"], [class*="material-icons"], .material-icons, summary svg, summary span:has(svg) {{
+    font-family: 'Material Symbols Rounded', 'Material Icons', sans-serif !important;
 }}
 
 /* App Canvas */
@@ -112,16 +117,15 @@ html, body, [class*="css"], .stMarkdown, p, span, label {{
     background-image: var(--her-bg-gradient) !important;
 }}
 
-/* Header Banner - Fixed Flexbox & Generous Spacing */
+/* Header Banner */
 .her-header-wrap {{
     display: flex;
     align-items: center;
     gap: 18px;
     padding: 18px 24px;
     background: var(--her-header-bg);
-    backdrop-filter: blur(16px);
     border: 1px solid var(--her-border);
-    border-radius: 18px;
+    border-radius: 16px;
     margin-bottom: 22px;
     box-shadow: var(--her-shadow);
 }}
@@ -183,6 +187,10 @@ html, body, [class*="css"], .stMarkdown, p, span, label {{
     border-right: 1px solid var(--her-border) !important;
 }}
 
+[data-testid="stSidebar"] label, [data-testid="stSidebar"] p, [data-testid="stSidebar"] span:not([data-testid*="icon"]) {{
+    color: var(--her-text) !important;
+}}
+
 /* Chat Messages */
 .stChatMessage {{
     background: var(--her-surface) !important;
@@ -203,16 +211,17 @@ html, body, [class*="css"], .stMarkdown, p, span, label {{
     border-left: 3.5px solid var(--her-coral) !important;
 }}
 
-/* Memory Cards in Sidebar - Clean vertical card with padding */
+/* Memory Cards in Sidebar */
 .memory-card {{
     background: var(--her-card-bg);
     border: 1px solid var(--her-card-border);
     border-radius: 12px;
     padding: 12px 14px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     display: flex;
     flex-direction: column;
     gap: 6px;
+    box-shadow: var(--her-shadow);
     transition: all 0.2s ease;
 }}
 .memory-card:hover {{
@@ -249,8 +258,14 @@ html, body, [class*="css"], .stMarkdown, p, span, label {{
 div[data-testid="stExpander"] {{
     background: var(--her-expander-bg) !important;
     border: 1px solid var(--her-border) !important;
-    border-radius: 14px !important;
+    border-radius: 12px !important;
     margin-bottom: 14px !important;
+    box-shadow: var(--her-shadow) !important;
+}}
+
+div[data-testid="stExpander"] summary, div[data-testid="stExpander"] summary span:not([data-testid*="icon"]) {{
+    color: var(--her-text) !important;
+    font-weight: 500 !important;
 }}
 
 /* Buttons */
@@ -258,28 +273,32 @@ div[data-testid="stExpander"] {{
     background-color: var(--her-btn-bg) !important;
     color: var(--her-btn-text) !important;
     border: 1px solid var(--her-border) !important;
-    border-radius: 12px !important;
+    border-radius: 10px !important;
     font-weight: 500 !important;
     padding: 8px 14px !important;
     line-height: 1.3 !important;
+    box-shadow: var(--her-shadow) !important;
     transition: all 0.2s ease !important;
 }}
 .stButton>button:hover {{
     background-color: var(--her-coral) !important;
     color: #FFFFFF !important;
     border-color: var(--her-coral) !important;
-    box-shadow: 0 4px 16px var(--her-coral-glow) !important;
 }}
 
 /* Chat Input Bar */
 .stChatInputContainer {{
-    border-radius: 16px !important;
+    border-radius: 14px !important;
     border: 1.5px solid var(--her-border) !important;
     background-color: var(--her-surface) !important;
 }}
 
+.stChatInput textarea {{
+    color: var(--her-text) !important;
+}}
+
 /* Captions / Notices */
-.stCaption {{
+.stCaption, [data-testid="stSidebar"] .stCaption {{
     color: var(--her-muted) !important;
     line-height: 1.4 !important;
 }}
@@ -317,26 +336,14 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# --- Sidebar: Profile & Mind Cortex ---
-st.sidebar.markdown("""
-<div style="display:flex; align-items:center; gap:10px; margin-top:4px; margin-bottom:12px;">
-    <span style="font-size:1.3rem;">🔴</span>
-    <div>
-        <div style="color:var(--her-title); font-size:1.25rem; font-family:'Playfair Display', serif; font-weight:600; font-style:italic; line-height:1.2;">Memory Cortex</div>
-        <div style="font-size:0.75rem; color:var(--her-muted); line-height:1.2;">Persistent Diary State</div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
 # Connection Status - Strictly Online
 st.sidebar.success("🟢 Connected to MongoDB Atlas (Online Cloud Mode)")
 
 # Ambient Soundtrack Player in Sidebar
 st.sidebar.markdown("---")
 st.sidebar.markdown("""
-<div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-    <span style="font-size:1.05rem;">🎶</span>
-    <span style="font-weight:600; font-size:0.83rem; letter-spacing:0.5px; text-transform:uppercase;">Ambient Soundtrack</span>
+<div style="font-weight:600; font-size:0.80rem; letter-spacing:0.8px; text-transform:uppercase; margin-bottom:4px;">
+    Ambient Soundtrack
 </div>
 <div style="font-size:0.75rem; color:var(--her-muted); margin-bottom:8px;">
     "Song on the Beach" • Relaxing tape piano ambience
@@ -351,7 +358,7 @@ st.sidebar.markdown("---")
 # User Profile input
 user_id = st.sidebar.text_input("User Profile", value="Theodore").strip() or "Theodore"
 
-# --- Quick Hackathon Demo Scenarios (Generous Grid Layout, Zero Clipping) ---
+# --- Quick Hackathon Demo Scenarios ---
 with st.expander("🎬 **Hackathon Demo Flow & Test Scenarios** (Click to test)", expanded=False):
     st.markdown("Select any key challenge scenario to test the agentic memory lifecycle:")
     
