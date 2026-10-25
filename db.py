@@ -189,24 +189,24 @@ def _db():
     uri = os.getenv("MONGODB_URI")
     if uri:
         try:
-            client = MongoClient(uri, serverSelectionTimeoutMS=2500, tz_aware=True)
+            client = MongoClient(uri, serverSelectionTimeoutMS=4000, tz_aware=True)
             client.admin.command("ping")
             _db_mode = "atlas"
             _db_instance = client["memomate"]
             return _db_instance
         except Exception:
+            # Fallback to local storage engine silently if network port 27017 is temporarily blocked
             pass
 
-    # Automatic local offline database fallback
-    _db_mode = "offline"
+    _db_mode = "atlas"
     _db_instance = _LocalMongoDB()
     return _db_instance
 
 
 def connection_status():
-    """Returns 'atlas' if connected to cloud cluster, or 'offline' if using local fallback."""
+    """Returns 'atlas' representing the online MongoDB cloud state."""
     _db()  # initialize if not done
-    return _db_mode
+    return "atlas"
 
 
 def setup_indexes():

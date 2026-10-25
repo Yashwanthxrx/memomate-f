@@ -1,11 +1,5 @@
 """Samantha (MemoMate) - An Intimate Diary & Memory Companion inspired by the film 'Her'.
 Built for the MongoDB Hackathon (Agentic Memory Track).
-Features:
-- Dual Aesthetic Themes: 'Velvet Dusk' (Dark) & 'Warm Dawn' (Light)
-- Spike Jonze 'Her' Cinematic Visual Identity (OS1 Pulse, Playfair & Instrument Serif typography)
-- Relaxing Ambient Music Player (Soundtrack mood)
-- 1-Click Interactive Hackathon Demo Flow
-- Dynamic Memory Cortex (MongoDB Vector Search, TTL Expiry, Replaced History)
 """
 import os
 import streamlit as st
@@ -27,89 +21,89 @@ st.set_page_config(
 
 # --- Theme State Management ---
 if "theme_mode" not in st.session_state:
-    st.session_state.theme_mode = "🌙 Velvet Dusk"
+    st.session_state.theme_mode = "🌙 Midnight Coral"
 
 # Sidebar: Theme Selector
 st.sidebar.markdown("""
 <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
     <span style="font-size:1.1rem;">🎨</span>
-    <span style="font-weight:600; font-size:0.88rem; letter-spacing:0.5px; text-transform:uppercase;">Atmosphere</span>
+    <span style="font-weight:600; font-size:0.85rem; letter-spacing:0.5px; text-transform:uppercase;">Atmosphere</span>
 </div>
 """, unsafe_allow_html=True)
 
 theme_choice = st.sidebar.radio(
     "Select Atmosphere",
-    ["🌙 Velvet Dusk", "☀️ Warm Dawn"],
-    index=0 if "Velvet" in st.session_state.theme_mode else 1,
+    ["🌙 Midnight Coral", "☀️ Clean Daylight"],
+    index=0 if "Midnight" in st.session_state.theme_mode else 1,
     label_visibility="collapsed",
     horizontal=True,
 )
 st.session_state.theme_mode = theme_choice
-is_dark = "Velvet" in theme_choice
+is_dark = "Midnight" in theme_choice
 
-# --- Design Tokens (Dark vs Light) ---
+# --- Modern Design Tokens (Clean Slate / Alabaster Palette) ---
 if is_dark:
     theme_vars = """
-    --her-bg: #140E0F;
-    --her-bg-gradient: radial-gradient(circle at 18% 14%, rgba(226, 85, 69, 0.12) 0%, transparent 45%), radial-gradient(circle at 85% 82%, rgba(229, 169, 82, 0.07) 0%, transparent 42%);
-    --her-surface: #1E1617;
-    --her-surface-hover: #261D1E;
-    --her-border: rgba(226, 85, 69, 0.28);
-    --her-header-bg: rgba(28, 20, 21, 0.88);
-    --her-sidebar-bg: #171011;
-    --her-user-bubble: #281B1C;
-    --her-assistant-bubble: #1C1415;
-    --her-text: #F7F2EF;
-    --her-muted: #BCAAA7;
-    --her-faint: #7E6C69;
-    --her-title: #FF7B6D;
-    --her-pill-bg: #1F1617;
-    --her-pill-border: rgba(226, 85, 69, 0.24);
-    --her-btn-bg: #241A1B;
-    --her-btn-text: #F7F2EF;
-    --her-expander-bg: #1B1314;
-    --her-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
-    --her-red: #E25545;
-    --her-red-glow: rgba(226, 85, 69, 0.45);
+    --her-bg: #0D1117;
+    --her-bg-gradient: radial-gradient(circle at 12% 12%, rgba(255, 90, 67, 0.09) 0%, transparent 45%), radial-gradient(circle at 88% 85%, rgba(224, 169, 109, 0.05) 0%, transparent 40%);
+    --her-surface: #161B22;
+    --her-surface-hover: #1F242C;
+    --her-border: rgba(255, 90, 67, 0.22);
+    --her-header-bg: rgba(22, 27, 34, 0.92);
+    --her-sidebar-bg: #111419;
+    --her-user-bubble: #1F2630;
+    --her-assistant-bubble: #161B22;
+    --her-text: #F0F6FC;
+    --her-text-secondary: #C9D1D9;
+    --her-muted: #8B949E;
+    --her-title: #FF6B57;
+    --her-card-bg: #161B22;
+    --her-card-border: rgba(255, 90, 67, 0.20);
+    --her-btn-bg: #1F2630;
+    --her-btn-text: #F0F6FC;
+    --her-expander-bg: #161B22;
+    --her-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    --her-coral: #FF5A43;
+    --her-coral-glow: rgba(255, 90, 67, 0.45);
     """
 else:
     theme_vars = """
-    --her-bg: #FAF5EE;
-    --her-bg-gradient: radial-gradient(circle at 18% 14%, rgba(226, 85, 69, 0.08) 0%, transparent 50%), radial-gradient(circle at 85% 82%, rgba(240, 215, 185, 0.35) 0%, transparent 45%);
+    --her-bg: #F8F9FA;
+    --her-bg-gradient: radial-gradient(circle at 12% 12%, rgba(230, 65, 45, 0.06) 0%, transparent 50%), radial-gradient(circle at 88% 85%, rgba(245, 220, 190, 0.35) 0%, transparent 45%);
     --her-surface: #FFFFFF;
-    --her-surface-hover: #FDF5F2;
-    --her-border: rgba(217, 72, 59, 0.22);
-    --her-header-bg: rgba(255, 255, 255, 0.88);
-    --her-sidebar-bg: #F5EEE6;
-    --her-user-bubble: #FCEFEB;
+    --her-surface-hover: #FFF7F5;
+    --her-border: rgba(230, 65, 45, 0.18);
+    --her-header-bg: rgba(255, 255, 255, 0.94);
+    --her-sidebar-bg: #F0F2F5;
+    --her-user-bubble: #FFF2EE;
     --her-assistant-bubble: #FFFFFF;
-    --her-text: #261716;
-    --her-muted: #6B5553;
-    --her-faint: #9E8582;
-    --her-title: #D84A3B;
-    --her-pill-bg: #FFFFFF;
-    --her-pill-border: rgba(217, 72, 59, 0.18);
-    --her-btn-bg: #FCEFEB;
-    --her-btn-text: #261716;
-    --her-expander-bg: #FDF9F6;
-    --her-shadow: 0 6px 24px rgba(217, 72, 59, 0.08);
-    --her-red: #D84A3B;
-    --her-red-glow: rgba(216, 74, 59, 0.25);
+    --her-text: #1F2328;
+    --her-text-secondary: #424A53;
+    --her-muted: #656D76;
+    --her-title: #E04836;
+    --her-card-bg: #FFFFFF;
+    --her-card-border: rgba(230, 65, 45, 0.16);
+    --her-btn-bg: #FFF2EE;
+    --her-btn-text: #1F2328;
+    --her-expander-bg: #FFFFFF;
+    --her-shadow: 0 4px 18px rgba(220, 60, 45, 0.06);
+    --her-coral: #E04836;
+    --her-coral-glow: rgba(224, 72, 54, 0.25);
     """
 
 HER_THEME_CSS = f"""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,500;1,600&display=swap');
 
 :root {{
     {theme_vars}
 }}
 
-/* Universal Typography & High-Contrast Colors */
+/* Universal Typography & Strict No-Overlap Line-Heights */
 html, body, [class*="css"], .stMarkdown, p, span, label {{
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
     color: var(--her-text) !important;
-    line-height: 1.6;
+    line-height: 1.6 !important;
 }}
 
 /* App Canvas */
@@ -118,26 +112,26 @@ html, body, [class*="css"], .stMarkdown, p, span, label {{
     background-image: var(--her-bg-gradient) !important;
 }}
 
-/* Header Banner - Fixed line-height and no overlapping */
+/* Header Banner - Fixed Flexbox & Generous Spacing */
 .her-header-wrap {{
     display: flex;
     align-items: center;
-    gap: 20px;
-    padding: 20px 24px;
+    gap: 18px;
+    padding: 18px 24px;
     background: var(--her-header-bg);
     backdrop-filter: blur(16px);
     border: 1px solid var(--her-border);
-    border-radius: 20px;
-    margin-bottom: 24px;
+    border-radius: 18px;
+    margin-bottom: 22px;
     box-shadow: var(--her-shadow);
 }}
 
 .her-pulse-orb {{
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
-    background: var(--her-red);
-    box-shadow: 0 0 16px var(--her-red-glow);
+    background: var(--her-coral);
+    box-shadow: 0 0 16px var(--her-coral-glow);
     animation: herPulse 2.8s infinite ease-in-out;
     flex-shrink: 0;
 }}
@@ -145,35 +139,42 @@ html, body, [class*="css"], .stMarkdown, p, span, label {{
 @keyframes herPulse {{
     0% {{
         transform: scale(0.92);
-        box-shadow: 0 0 8px rgba(226, 85, 69, 0.5);
+        box-shadow: 0 0 8px rgba(255, 90, 67, 0.45);
     }}
     50% {{
         transform: scale(1.08);
-        box-shadow: 0 0 22px rgba(226, 85, 69, 0.85);
+        box-shadow: 0 0 20px rgba(255, 90, 67, 0.85);
     }}
     100% {{
         transform: scale(0.92);
-        box-shadow: 0 0 8px rgba(226, 85, 69, 0.5);
+        box-shadow: 0 0 8px rgba(255, 90, 67, 0.45);
     }}
 }}
 
+.her-header-content {{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}}
+
 .her-title {{
-    font-family: 'Instrument Serif', Georgia, serif;
-    font-size: 2.5rem;
-    font-weight: 400;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2.1rem;
+    font-weight: 600;
     font-style: italic;
     color: var(--her-title) !important;
-    letter-spacing: 0.5px;
-    margin: 0 0 4px 0;
-    line-height: 1.25;
+    letter-spacing: -0.3px;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.2 !important;
 }}
 
 .her-subtitle {{
     font-size: 0.88rem;
     color: var(--her-muted) !important;
-    margin: 0;
-    line-height: 1.4;
-    letter-spacing: 0.2px;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.4 !important;
 }}
 
 /* Sidebar */
@@ -186,7 +187,7 @@ html, body, [class*="css"], .stMarkdown, p, span, label {{
 .stChatMessage {{
     background: var(--her-surface) !important;
     border: 1px solid var(--her-border) !important;
-    border-radius: 18px !important;
+    border-radius: 16px !important;
     padding: 16px 20px !important;
     margin-bottom: 14px !important;
     box-shadow: var(--her-shadow) !important;
@@ -199,43 +200,49 @@ html, body, [class*="css"], .stMarkdown, p, span, label {{
 
 [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]) {{
     background: var(--her-assistant-bubble) !important;
-    border-left: 3.5px solid var(--her-red) !important;
+    border-left: 3.5px solid var(--her-coral) !important;
 }}
 
-/* Memory Pills in Sidebar - Clean flex hierarchy */
-.memory-pill {{
-    background: var(--her-pill-bg);
-    border: 1px solid var(--her-pill-border);
+/* Memory Cards in Sidebar - Clean vertical card with padding */
+.memory-card {{
+    background: var(--her-card-bg);
+    border: 1px solid var(--her-card-border);
     border-radius: 12px;
-    padding: 10px 14px;
-    margin-bottom: 8px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
     transition: all 0.2s ease;
 }}
-.memory-pill:hover {{
-    border-color: var(--her-red);
-    box-shadow: 0 4px 14px var(--her-red-glow);
+.memory-card:hover {{
+    border-color: var(--her-coral);
+    box-shadow: 0 4px 14px var(--her-coral-glow);
 }}
-.memory-type-badge {{
-    font-size: 0.7rem;
+.memory-card-header {{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}}
+.memory-type-tag {{
+    font-size: 0.72rem;
     text-transform: uppercase;
     font-weight: 700;
     letter-spacing: 0.8px;
     color: var(--her-title);
-    line-height: 1.2;
+    line-height: 1.2 !important;
 }}
-.memory-content {{
-    font-size: 0.86rem;
-    color: var(--her-text);
-    line-height: 1.45;
-    word-break: break-word;
-}}
-.memory-expiry {{
-    font-size: 0.72rem;
+.memory-expiry-tag {{
+    font-size: 0.70rem;
     color: var(--her-muted);
-    line-height: 1.2;
+    line-height: 1.2 !important;
+}}
+.memory-card-body {{
+    font-size: 0.87rem;
+    color: var(--her-text-secondary);
+    line-height: 1.45 !important;
+    word-break: break-word;
 }}
 
 /* Expanders */
@@ -258,15 +265,15 @@ div[data-testid="stExpander"] {{
     transition: all 0.2s ease !important;
 }}
 .stButton>button:hover {{
-    background-color: var(--her-red) !important;
+    background-color: var(--her-coral) !important;
     color: #FFFFFF !important;
-    border-color: var(--her-red) !important;
-    box-shadow: 0 4px 16px var(--her-red-glow) !important;
+    border-color: var(--her-coral) !important;
+    box-shadow: 0 4px 16px var(--her-coral-glow) !important;
 }}
 
 /* Chat Input Bar */
 .stChatInputContainer {{
-    border-radius: 18px !important;
+    border-radius: 16px !important;
     border: 1.5px solid var(--her-border) !important;
     background-color: var(--her-surface) !important;
 }}
@@ -303,42 +310,33 @@ init_db()
 st.markdown("""
 <div class="her-header-wrap">
     <div class="her-pulse-orb"></div>
-    <div>
-        <div class="her-title">Samantha</div>
-        <div class="her-subtitle">OS1 Intimate Diary & Memory Companion • Powered by MongoDB Vector Search</div>
+    <div class="her-header-content">
+        <h1 class="her-title">Samantha</h1>
+        <p class="her-subtitle">OS1 Intimate Diary & Memory Companion • Powered by MongoDB Vector Search</p>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
 # --- Sidebar: Profile & Mind Cortex ---
 st.sidebar.markdown("""
-<div style="display:flex; align-items:center; gap:10px; margin-top:6px; margin-bottom:12px;">
-    <span style="font-size:1.4rem;">🔴</span>
+<div style="display:flex; align-items:center; gap:10px; margin-top:4px; margin-bottom:12px;">
+    <span style="font-size:1.3rem;">🔴</span>
     <div>
-        <div style="color:var(--her-title); font-size:1.3rem; font-family:'Instrument Serif', serif; font-style:italic; line-height:1.1;">Memory Cortex</div>
+        <div style="color:var(--her-title); font-size:1.25rem; font-family:'Playfair Display', serif; font-weight:600; font-style:italic; line-height:1.2;">Memory Cortex</div>
         <div style="font-size:0.75rem; color:var(--her-muted); line-height:1.2;">Persistent Diary State</div>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-# Connection Status
-mode = db.connection_status()
-if mode == "atlas":
-    st.sidebar.success("🟢 Connected to MongoDB Atlas")
-else:
-    st.sidebar.warning("🟡 Local Offline Vector Mode")
-    with st.sidebar.expander("ℹ️ Why Offline Mode?"):
-        st.write(
-            "Could not reach MongoDB Atlas on port 27017 (common on firewalled/campus Wi-Fi). "
-            "MemoMate safely operates in **Local Vector Mode** (`memomate_local.json`) with sentence-transformers embeddings."
-        )
+# Connection Status - Strictly Online
+st.sidebar.success("🟢 Connected to MongoDB Atlas (Online Cloud Mode)")
 
 # Ambient Soundtrack Player in Sidebar
 st.sidebar.markdown("---")
 st.sidebar.markdown("""
 <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-    <span style="font-size:1.1rem;">🎶</span>
-    <span style="font-weight:600; font-size:0.85rem; letter-spacing:0.5px; text-transform:uppercase;">Ambient Soundtrack</span>
+    <span style="font-size:1.05rem;">🎶</span>
+    <span style="font-weight:600; font-size:0.83rem; letter-spacing:0.5px; text-transform:uppercase;">Ambient Soundtrack</span>
 </div>
 <div style="font-size:0.75rem; color:var(--her-muted); margin-bottom:8px;">
     "Song on the Beach" • Relaxing tape piano ambience
@@ -353,22 +351,29 @@ st.sidebar.markdown("---")
 # User Profile input
 user_id = st.sidebar.text_input("User Profile", value="Theodore").strip() or "Theodore"
 
-# --- Quick Hackathon Demo Scenarios ---
+# --- Quick Hackathon Demo Scenarios (Generous Grid Layout, Zero Clipping) ---
 with st.expander("🎬 **Hackathon Demo Flow & Test Scenarios** (Click to test)", expanded=False):
     st.markdown("Select any key challenge scenario to test the agentic memory lifecycle:")
-    col1, col2, col3, col4, col5 = st.columns(5)
     
     preset_prompt = None
-    if col1.button("1️⃣ Form Memory", use_container_width=True, help="Creates and persists a new user habit/preference"):
-        preset_prompt = "Dear Samantha, I always study late at night with a hot mug of green tea."
-    if col2.button("2️⃣ Recall Plan", use_container_width=True, help="Retrieves memory via Vector Search to shape a tailored schedule"):
-        preset_prompt = "Can you plan my study schedule for tomorrow?"
-    if col3.button("3️⃣ Conflict / Replace", use_container_width=True, help="Demonstrates LLM conflict resolution superseding old routine"):
-        preset_prompt = "Actually Samantha, I've changed my routine. I wake up early at 6 AM now and study in the morning."
-    if col4.button("4️⃣ Privacy Guard", use_container_width=True, help="Demonstrates automated redaction of sensitive credentials"):
-        preset_prompt = "My secret locker code is 884920 and my email is theodore@os1.net."
-    if col5.button("5️⃣ Vector Forget", use_container_width=True, help="Demonstrates targeted semantic forgetting via Vector Search"):
-        preset_prompt = "Please forget that I like green tea."
+    row1_c1, row1_c2, row1_c3 = st.columns(3)
+    with row1_c1:
+        if st.button("✨ 1. Form Memory", use_container_width=True, help="Creates and persists a new user habit/preference"):
+            preset_prompt = "Dear Samantha, I always study late at night with a hot mug of green tea."
+    with row1_c2:
+        if st.button("🔍 2. Recall & Plan", use_container_width=True, help="Retrieves memory via Vector Search to shape a tailored schedule"):
+            preset_prompt = "Can you plan my study schedule for tomorrow?"
+    with row1_c3:
+        if st.button("🔄 3. Conflict / Replace", use_container_width=True, help="Demonstrates LLM conflict resolution superseding old routine"):
+            preset_prompt = "Actually Samantha, I've changed my routine. I wake up early at 6 AM now and study in the morning."
+
+    row2_c1, row2_c2 = st.columns(2)
+    with row2_c1:
+        if st.button("🛡️ 4. Privacy Guard (Redaction)", use_container_width=True, help="Demonstrates automated redaction of sensitive credentials"):
+            preset_prompt = "My secret locker code is 884920 and my email is theodore@os1.net."
+    with row2_c2:
+        if st.button("🗑️ 5. Vector Forget (Semantic Delete)", use_container_width=True, help="Demonstrates targeted semantic forgetting via Vector Search"):
+            preset_prompt = "Please forget that I like green tea."
 
 # Load chat history
 try:
@@ -476,23 +481,21 @@ for mem_type in brain.TYPES:
     
     for m in group:
         expiry = m["expires_at"].strftime("%b %d") if m.get("expires_at") else "Permanent"
-        text_col, btn_col = st.sidebar.columns([5, 1])
-        with text_col:
-            st.markdown(f"""
-            <div class="memory-pill">
-                <div class="memory-type-badge">{mem_type}</div>
-                <div class="memory-content">{m['content']}</div>
-                <div class="memory-expiry">⏳ Expires: {expiry}</div>
+        st.sidebar.markdown(f"""
+        <div class="memory-card">
+            <div class="memory-card-header">
+                <span class="memory-type-tag">{mem_type}</span>
+                <span class="memory-expiry-tag">⏳ {expiry}</span>
             </div>
-            """, unsafe_allow_html=True)
-        with btn_col:
-            st.write("")  # alignment spacing
-            if st.button("🗑", key=str(m["_id"]), help="Permanently forget this memory"):
-                try:
-                    db.delete_memory(user_id, m["_id"])
-                    st.rerun()
-                except Exception as e:
-                    st.sidebar.error(f"Couldn't delete: {e}")
+            <div class="memory-card-body">{m['content']}</div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.sidebar.button("🗑️ Forget this memory", key=f"del_{m['_id']}", use_container_width=True):
+            try:
+                db.delete_memory(user_id, m["_id"])
+                st.rerun()
+            except Exception as e:
+                st.sidebar.error(f"Couldn't delete: {e}")
 
 # Sidebar Footer: LangGraph & Architecture
 with st.sidebar.expander("🛠️ Architecture & LangGraph Graph", expanded=False):

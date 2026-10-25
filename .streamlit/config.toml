@@ -1,12 +1,10 @@
 [server]
-# Avoid scanning virtualenv/site-packages; this prevents noisy lazy-import errors
-# from optional Transformers vision modules (e.g., torchvision).
 fileWatcherType = "none"
 
 [theme]
 base = "dark"
-primaryColor = "#E25545"
-backgroundColor = "#140E0F"
-secondaryBackgroundColor = "#1E1617"
-textColor = "#F7F2EF"
+primaryColor = "#FF5A43"
+backgroundColor = "#0D1117"
+secondaryBackgroundColor = "#161B22"
+textColor = "#F0F6FC"
 font = "sans serif"
